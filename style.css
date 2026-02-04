@@ -187,8 +187,13 @@ body {
 .btn-no {
     background: linear-gradient(135deg, #FFE5EC 0%, var(--light-pink) 100%);
     color: var(--text-dark);
-    position: absolute;
+    position: relative;
     transition: all 0.2s ease;
+}
+
+/* When No button starts moving, it becomes absolutely positioned */
+.btn-no.moving {
+    position: absolute;
 }
 
 .btn-no:hover {
