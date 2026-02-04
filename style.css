@@ -1,0 +1,504 @@
+/* ================================
+   Valentine's Day Website Styles
+   ================================ */
+
+/* CSS Variables for easy customization */
+:root {
+    --primary-pink: #FF6B9D;
+    --light-pink: #FFB6C1;
+    --soft-pink: #FFC0CB;
+    --heart-red: #FF1744;
+    --white: #FFFFFF;
+    --cream: #FFF5F7;
+    --text-dark: #4A2C2A;
+    --shadow-soft: rgba(255, 107, 157, 0.3);
+    --shadow-strong: rgba(255, 107, 157, 0.5);
+}
+
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Quicksand', sans-serif;
+    background: linear-gradient(135deg, #FFF5F7 0%, #FFE5EC 50%, #FFC0CB 100%);
+    color: var(--text-dark);
+    overflow-x: hidden;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* ================================
+   Floating Hearts Background
+   ================================ */
+.hearts-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.heart {
+    position: absolute;
+    font-size: 20px;
+    opacity: 0.6;
+    animation: float-up 8s linear infinite;
+}
+
+@keyframes float-up {
+    0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.6;
+    }
+    90% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* ================================
+   Page Structure
+   ================================ */
+.page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.page.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.content-wrapper {
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+}
+
+/* ================================
+   PAGE 1: The Question
+   ================================ */
+.main-question {
+    font-family: 'Pacifico', cursive;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: var(--heart-red);
+    margin-bottom: 50px;
+    text-shadow: 2px 2px 4px var(--shadow-soft);
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+    0%, 100% {
+        transform: scale(1);
+        text-shadow: 2px 2px 4px var(--shadow-soft);
+    }
+    50% {
+        transform: scale(1.05);
+        text-shadow: 0 0 20px var(--shadow-strong), 2px 2px 4px var(--shadow-soft);
+    }
+}
+
+/* ================================
+   Buttons
+   ================================ */
+.buttons-container {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+
+.btn {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    padding: 18px 45px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px var(--shadow-soft);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* Yes Button */
+.btn-yes {
+    background: linear-gradient(135deg, var(--heart-red) 0%, var(--primary-pink) 100%);
+    color: var(--white);
+    transform: scale(1.1);
+}
+
+.btn-yes:hover {
+    transform: scale(1.2);
+    box-shadow: 0 12px 30px var(--shadow-strong);
+    animation: heartbeat 0.6s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1.2); }
+    25% { transform: scale(1.25); }
+    50% { transform: scale(1.2); }
+    75% { transform: scale(1.25); }
+}
+
+/* No Button - The Tricky One */
+.btn-no {
+    background: linear-gradient(135deg, #FFE5EC 0%, var(--light-pink) 100%);
+    color: var(--text-dark);
+    position: absolute;
+    transition: all 0.2s ease;
+}
+
+.btn-no:hover {
+    transform: scale(1.05);
+}
+
+/* ================================
+   Begging Messages
+   ================================ */
+.begging-message {
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--primary-pink);
+    min-height: 40px;
+    margin-top: 20px;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.4s ease;
+}
+
+.begging-message.show {
+    opacity: 1;
+    transform: translateY(0);
+    animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+/* ================================
+   PAGE 2: Success Page
+   ================================ */
+.celebration-title {
+    font-family: 'Pacifico', cursive;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: var(--heart-red);
+    margin-bottom: 40px;
+    animation: celebration-entrance 1s ease-out;
+}
+
+@keyframes celebration-entrance {
+    0% {
+        opacity: 0;
+        transform: translateY(-50px) rotate(-10deg);
+    }
+    60% {
+        transform: translateY(10px) rotate(5deg);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) rotate(0deg);
+    }
+}
+
+/* Celebration Image */
+.celebration-image {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto 40px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px var(--shadow-soft);
+    animation: float-in 1.2s ease-out 0.3s both;
+}
+
+.celebration-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+@keyframes float-in {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Love Message */
+.love-message {
+    font-size: 1.3rem;
+    line-height: 1.8;
+    color: var(--text-dark);
+    margin-bottom: 50px;
+    padding: 0 20px;
+    animation: fade-in 1s ease-out 0.6s both;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ================================
+   Scroll Indicator
+   ================================ */
+.scroll-indicator {
+    cursor: pointer;
+    padding: 20px;
+    animation: bounce 2s ease-in-out infinite;
+}
+
+.scroll-indicator p {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary-pink);
+    margin-bottom: 10px;
+}
+
+.heart-arrow {
+    font-size: 2rem;
+    color: var(--heart-red);
+    animation: arrow-bounce 1.5s ease-in-out infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes arrow-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(10px); }
+}
+
+/* ================================
+   Photo Gallery Section
+   ================================ */
+.gallery-section {
+    padding: 80px 20px;
+    background: linear-gradient(to bottom, transparent 0%, rgba(255, 255, 255, 0.5) 100%);
+}
+
+.gallery-title {
+    font-family: 'Pacifico', cursive;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    color: var(--heart-red);
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.photo-item {
+    background: var(--white);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s ease;
+    cursor: pointer;
+}
+
+.photo-item:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 15px 40px var(--shadow-strong);
+}
+
+.photo-item img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.photo-item:hover img {
+    transform: scale(1.1);
+}
+
+.photo-caption {
+    padding: 15px;
+    font-size: 1rem;
+    color: var(--text-dark);
+    text-align: center;
+    background: var(--cream);
+}
+
+/* ================================
+   Confetti Canvas
+   ================================ */
+#confettiCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    display: none;
+}
+
+#confettiCanvas.active {
+    display: block;
+}
+
+/* ================================
+   Music Toggle Button
+   ================================ */
+.music-toggle {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, var(--heart-red) 0%, var(--primary-pink) 100%);
+    color: var(--white);
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 5px 20px var(--shadow-soft);
+    z-index: 1000;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.music-toggle:hover {
+    transform: scale(1.1) rotate(15deg);
+    box-shadow: 0 8px 30px var(--shadow-strong);
+}
+
+.music-toggle.playing {
+    animation: music-pulse 1s ease-in-out infinite;
+}
+
+@keyframes music-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* ================================
+   Responsive Design
+   ================================ */
+@media (max-width: 768px) {
+    .buttons-container {
+        gap: 20px;
+    }
+    
+    .btn {
+        font-size: 1.2rem;
+        padding: 15px 35px;
+    }
+    
+    .photo-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    
+    .music-toggle {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-question {
+        margin-bottom: 40px;
+    }
+    
+    .buttons-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .btn {
+        width: 80%;
+        max-width: 250px;
+    }
+    
+    .begging-message {
+        font-size: 1.1rem;
+    }
+    
+    .photo-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ================================
+   Utility Classes
+   ================================ */
+.hidden {
+    display: none !important;
+}
+
+.no-scroll {
+    overflow: hidden;
+}

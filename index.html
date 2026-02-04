@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine? 💕</title>
+    
+    <!-- Google Fonts - Romantic & Playful Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Floating Hearts Background Animation -->
+    <div class="hearts-container" id="heartsContainer"></div>
+    
+    <!-- PAGE 1: The Question -->
+    <div class="page active" id="page1">
+        <div class="content-wrapper">
+            <h1 class="main-question">
+                Will you be my Valentine? 💕
+            </h1>
+            
+            <div class="buttons-container">
+                <button class="btn btn-yes" id="yesBtn">
+                    Yes ❤️
+                </button>
+                <button class="btn btn-no" id="noBtn">
+                    No 😢
+                </button>
+            </div>
+            
+            <!-- Begging messages appear here -->
+            <div class="begging-message" id="beggingMessage"></div>
+        </div>
+    </div>
+    
+    <!-- PAGE 2: Success! -->
+    <div class="page" id="page2">
+        <div class="content-wrapper">
+            <h1 class="celebration-title">
+                I knew you'd say YES! ❤️🎉
+            </h1>
+            
+            <!-- GIF/Illustration placeholder -->
+            <div class="celebration-image">
+                <!-- Replace this URL with your own romantic GIF -->
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcDRxNnN5YzZtdnN5N3RjZWJ3ZnB3cWRzZnB3cWRzZnB3cWRzZnB3cSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o6Zt6ML6BklcajjsA/giphy.gif" 
+                     alt="Celebration" 
+                     id="celebrationGif">
+            </div>
+            
+            <p class="love-message">
+                You've made me the happiest person in the world by saying yes. 
+                I can't wait to celebrate this special day with you ❤️
+            </p>
+            
+            <!-- Scroll indicator -->
+            <div class="scroll-indicator" id="scrollIndicator">
+                <p>Click for more surprises 💕</p>
+                <div class="heart-arrow">
+                    ↓
+                </div>
+            </div>
+        </div>
+        
+        <!-- Photo Gallery Section -->
+        <div class="gallery-section" id="gallerySection">
+            <h2 class="gallery-title">Our Beautiful Moments Together 📸</h2>
+            
+            <div class="photo-grid">
+                <!-- Photo 1 -->
+                <div class="photo-item">
+                    <!-- Replace with your photo -->
+                    <img src="https://via.placeholder.com/400x300/FFB6C1/FFFFFF?text=Photo+1" alt="Our Memory 1">
+                    <p class="photo-caption">Caption for photo 1</p>
+                </div>
+                
+                <!-- Photo 2 -->
+                <div class="photo-item">
+                    <!-- Replace with your photo -->
+                    <img src="https://via.placeholder.com/400x300/FFB6C1/FFFFFF?text=Photo+2" alt="Our Memory 2">
+                    <p class="photo-caption">Caption for photo 2</p>
+                </div>
+                
+                <!-- Photo 3 -->
+                <div class="photo-item">
+                    <!-- Replace with your photo -->
+                    <img src="https://via.placeholder.com/400x300/FFB6C1/FFFFFF?text=Photo+3" alt="Our Memory 3">
+                    <p class="photo-caption">Caption for photo 3</p>
+                </div>
+                
+                <!-- Photo 4 -->
+                <div class="photo-item">
+                    <!-- Replace with your photo -->
+                    <img src="https://via.placeholder.com/400x300/FFB6C1/FFFFFF?text=Photo+4" alt="Our Memory 4">
+                    <p class="photo-caption">Caption for photo 4</p>
+                </div>
+                
+                <!-- Photo 5 -->
+                <div class="photo-item">
+                    <!-- Replace with your photo -->
+                    <img src="https://via.placeholder.com/400x300/FFB6C1/FFFFFF?text=Photo+5" alt="Our Memory 5">
+                    <p class="photo-caption">Caption for photo 5</p>
+                </div>
+                
+                <!-- Photo 6 -->
+                <div class="photo-item">
+                    <!-- Replace with your photo -->
+                    <img src="https://via.placeholder.com/400x300/FFB6C1/FFFFFF?text=Photo+6" alt="Our Memory 6">
+                    <p class="photo-caption">Caption for photo 6</p>
+                </div>
+                
+                <!-- Photo 7 -->
+                <div class="photo-item">
+                    <!-- Replace with your photo -->
+                    <img src="https://via.placeholder.com/400x300/FFB6C1/FFFFFF?text=Photo+7" alt="Our Memory 7">
+                    <p class="photo-caption">Caption for photo 7</p>
+                </div>
+                
+                <!-- Photo 8 -->
+                <div class="photo-item">
+                    <!-- Replace with your photo -->
+                    <img src="https://via.placeholder.com/400x300/FFB6C1/FFFFFF?text=Photo+8" alt="Our Memory 8">
+                    <p class="photo-caption">Caption for photo 8</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Confetti Canvas (hidden initially) -->
+    <canvas id="confettiCanvas"></canvas>
+    
+    <!-- Optional: Music Toggle (off by default) -->
+    <button class="music-toggle" id="musicToggle" title="Toggle Music">
+        🎵
+    </button>
+    
+    <!-- Hidden audio element for romantic music -->
+    <audio id="bgMusic" loop>
+        <!-- Add your own romantic music file here -->
+        <!-- <source src="romantic-music.mp3" type="audio/mpeg"> -->
+    </audio>
+    
+    <script src="script.js"></script>
+</body>
+</html>
