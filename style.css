@@ -101,7 +101,7 @@ body {
    PAGE 1: The Question
    ================================ */
 .main-question {
-    font-family: 'Pacifico', cursive;
+    font-family: 'Dancing Script', cursive;
     font-size: clamp(2rem, 5vw, 3.5rem);
     color: var(--heart-red);
     margin-bottom: 50px;
@@ -232,7 +232,7 @@ body {
    PAGE 2: Success Page
    ================================ */
 .celebration-title {
-    font-family: 'Pacifico', cursive;
+    font-family: 'Dancing Script', cursive;
     font-size: clamp(2rem, 5vw, 3.5rem);
     color: var(--heart-red);
     margin-bottom: 40px;
@@ -343,7 +343,7 @@ body {
 }
 
 .gallery-title {
-    font-family: 'Pacifico', cursive;
+    font-family: 'Dancing Script', cursive;
     font-size: clamp(1.8rem, 4vw, 2.8rem);
     color: var(--heart-red);
     text-align: center;
