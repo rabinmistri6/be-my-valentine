@@ -93,15 +93,26 @@ function moveNoButton() {
     const btnWidth = noBtn.offsetWidth;
     const btnHeight = noBtn.offsetHeight;
     
-    // Calculate safe boundaries (keep button fully visible)
-    const maxX = windowWidth - btnWidth - 20;
-    const maxY = windowHeight - btnHeight - 20;
-    const minX = 20;
-    const minY = 20;
+    // Calculate safe boundaries with more padding to ensure button stays visible
+    const padding = 30; // Increase padding for safety
+    const maxX = windowWidth - btnWidth - padding;
+    const maxY = windowHeight - btnHeight - padding;
+    const minX = padding;
+    const minY = padding;
+    
+    // Ensure we have valid boundaries
+    if (maxX <= minX || maxY <= minY) {
+        console.log('Window too small for button movement');
+        return;
+    }
     
     // Generate random position within safe boundaries
-    const randomX = Math.floor(Math.random() * (maxX - minX)) + minX;
-    const randomY = Math.floor(Math.random() * (maxY - minY)) + minY;
+    let randomX = Math.floor(Math.random() * (maxX - minX)) + minX;
+    let randomY = Math.floor(Math.random() * (maxY - minY)) + minY;
+    
+    // Double-check boundaries (safety net)
+    randomX = Math.max(minX, Math.min(randomX, maxX));
+    randomY = Math.max(minY, Math.min(randomY, maxY));
     
     // Apply new position
     noBtn.style.left = randomX + 'px';
