@@ -83,6 +83,11 @@ function createFloatingHearts() {
 // No Button Movement Logic
 // ================================
 function moveNoButton() {
+    // Add 'moving' class to make it absolutely positioned
+    if (!noBtn.classList.contains('moving')) {
+        noBtn.classList.add('moving');
+    }
+    
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
     const btnWidth = noBtn.offsetWidth;
