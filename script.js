@@ -266,6 +266,170 @@ function triggerConfetti() {
 }
 
 // ================================
+// Swipeable Cards Functionality
+// ================================
+const cards = document.querySelectorAll('.card');
+let currentCardIndex = 0;
+let isDragging = false;
+let startX = 0;
+let currentX = 0;
+
+// Initialize cards
+function initCards() {
+    if (cards.length === 0) return;
+    
+    cards.forEach((card, index) => {
+        card.setAttribute('data-card', cards.length - index);
+    });
+}
+
+// Remove a card with swipe animation
+function removeCard(direction) {
+    if (currentCardIndex >= cards.length) return;
+    
+    const currentCard = cards[currentCardIndex];
+    
+    // Add swipe animation class
+    if (direction === 'right') {
+        currentCard.classList.add('swiped-right');
+    } else {
+        currentCard.classList.add('swiped-left');
+    }
+    
+    // Move to next card
+    currentCardIndex++;
+    
+    // Update remaining cards' data attributes for stack effect
+    updateCardStack();
+    
+    // Remove the card from DOM after animation
+    setTimeout(() => {
+        currentCard.style.display = 'none';
+    }, 500);
+}
+
+// Update card stack positions
+function updateCardStack() {
+    cards.forEach((card, index) => {
+        if (index >= currentCardIndex) {
+            const position = index - currentCardIndex + 1;
+            card.setAttribute('data-card', position);
+        }
+    });
+}
+
+// Mouse/Touch event handlers
+cards.forEach((card, index) => {
+    // Mouse events
+    card.addEventListener('mousedown', (e) => {
+        if (index === currentCardIndex) {
+            isDragging = true;
+            startX = e.pageX;
+            card.style.transition = 'none';
+        }
+    });
+    
+    // Touch events (mobile)
+    card.addEventListener('touchstart', (e) => {
+        if (index === currentCardIndex) {
+            isDragging = true;
+            startX = e.touches[0].pageX;
+            card.style.transition = 'none';
+        }
+    });
+});
+
+// Mouse move
+document.addEventListener('mousemove', (e) => {
+    if (!isDragging || currentCardIndex >= cards.length) return;
+    
+    currentX = e.pageX;
+    const diff = currentX - startX;
+    const currentCard = cards[currentCardIndex];
+    
+    // Move card with mouse
+    const rotation = diff / 10;
+    currentCard.style.transform = `translateX(${diff}px) rotate(${rotation}deg)`;
+});
+
+// Touch move
+document.addEventListener('touchmove', (e) => {
+    if (!isDragging || currentCardIndex >= cards.length) return;
+    
+    currentX = e.touches[0].pageX;
+    const diff = currentX - startX;
+    const currentCard = cards[currentCardIndex];
+    
+    // Move card with touch
+    const rotation = diff / 10;
+    currentCard.style.transform = `translateX(${diff}px) rotate(${rotation}deg)`;
+});
+
+// Mouse up
+document.addEventListener('mouseup', () => {
+    if (!isDragging || currentCardIndex >= cards.length) return;
+    
+    const diff = currentX - startX;
+    const currentCard = cards[currentCardIndex];
+    
+    // Reset transition
+    currentCard.style.transition = 'transform 0.3s ease';
+    
+    // If swiped far enough, remove card
+    if (Math.abs(diff) > 100) {
+        const direction = diff > 0 ? 'right' : 'left';
+        removeCard(direction);
+    } else {
+        // Snap back to center
+        currentCard.style.transform = '';
+    }
+    
+    isDragging = false;
+    startX = 0;
+    currentX = 0;
+});
+
+// Touch end
+document.addEventListener('touchend', () => {
+    if (!isDragging || currentCardIndex >= cards.length) return;
+    
+    const diff = currentX - startX;
+    const currentCard = cards[currentCardIndex];
+    
+    // Reset transition
+    currentCard.style.transition = 'transform 0.3s ease';
+    
+    // If swiped far enough, remove card
+    if (Math.abs(diff) > 100) {
+        const direction = diff > 0 ? 'right' : 'left';
+        removeCard(direction);
+    } else {
+        // Snap back to center
+        currentCard.style.transform = '';
+    }
+    
+    isDragging = false;
+    startX = 0;
+    currentX = 0;
+});
+
+// Click to advance (for desktop users who don't want to drag)
+cards.forEach((card, index) => {
+    card.addEventListener('click', (e) => {
+        if (index === currentCardIndex && !isDragging) {
+            // Alternate between right and left for variety
+            const direction = Math.random() > 0.5 ? 'right' : 'left';
+            removeCard(direction);
+        }
+    });
+});
+
+// Initialize on page load
+if (document.getElementById('page2')) {
+    initCards();
+}
+
+// ================================
 // Scroll to Gallery
 // ================================
 scrollIndicator.addEventListener('click', () => {
