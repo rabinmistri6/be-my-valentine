@@ -266,176 +266,156 @@ function triggerConfetti() {
 }
 
 // ================================
-// Swipeable Cards Functionality (FIXED)
+// Swipeable Cards Functionality (WITH ARROWS)
 // ================================
-let cardStack = [];
-let activeCard = null;
-let startPosX = 0;
-let startPosY = 0;
-let currentPosX = 0;
-let currentPosY = 0;
-let isDraggingCard = false;
+let cardsArray = [];
+let currentCardNumber = 0;
+let totalCardsCount = 0;
 
-function initializeCards() {
-    const cardsContainer = document.querySelector('.card-stack');
-    if (!cardsContainer) return;
+function initializeCardStack() {
+    const cardStackElement = document.querySelector('.card-stack');
+    if (!cardStackElement) return;
     
-    cardStack = Array.from(cardsContainer.querySelectorAll('.card'));
+    cardsArray = Array.from(cardStackElement.querySelectorAll('.card'));
+    totalCardsCount = cardsArray.length;
+    currentCardNumber = 0;
     
-    if (cardStack.length === 0) return;
+    if (cardsArray.length === 0) return;
     
-    // Set up event listeners for each card
-    cardStack.forEach((card, index) => {
-        // Mouse events
-        card.addEventListener('mousedown', handleDragStart);
-        
-        // Touch events
-        card.addEventListener('touchstart', handleDragStart, { passive: false });
-    });
+    // Update counter
+    updateCardCounter();
     
-    // Global listeners
-    document.addEventListener('mousemove', handleDragMove);
-    document.addEventListener('mouseup', handleDragEnd);
-    document.addEventListener('touchmove', handleDragMove, { passive: false });
-    document.addEventListener('touchend', handleDragEnd);
-}
-
-function handleDragStart(e) {
-    // Only interact with the top card
-    const topCard = cardStack[cardStack.length - 1];
-    if (e.currentTarget !== topCard) return;
+    // Set up arrow button listeners
+    const leftArrow = document.getElementById('cardArrowLeft');
+    const rightArrow = document.getElementById('cardArrowRight');
     
-    activeCard = e.currentTarget;
-    isDraggingCard = true;
-    
-    // Get initial position
-    if (e.type === 'mousedown') {
-        startPosX = e.clientX;
-        startPosY = e.clientY;
-    } else if (e.type === 'touchstart') {
-        startPosX = e.touches[0].clientX;
-        startPosY = e.touches[0].clientY;
-        e.preventDefault(); // Prevent scrolling on mobile
+    if (leftArrow) {
+        leftArrow.addEventListener('click', () => moveCardLeft());
     }
     
-    activeCard.classList.add('dragging');
-}
-
-function handleDragMove(e) {
-    if (!isDraggingCard || !activeCard) return;
-    
-    // Get current position
-    if (e.type === 'mousemove') {
-        currentPosX = e.clientX;
-        currentPosY = e.clientY;
-    } else if (e.type === 'touchmove') {
-        currentPosX = e.touches[0].clientX;
-        currentPosY = e.touches[0].clientY;
-        e.preventDefault(); // Prevent scrolling
+    if (rightArrow) {
+        rightArrow.addEventListener('click', () => moveCardRight());
     }
     
-    // Calculate distance moved
-    const deltaX = currentPosX - startPosX;
-    const deltaY = currentPosY - startPosY;
-    
-    // Calculate rotation based on horizontal movement
-    const rotation = deltaX / 20;
-    
-    // Apply transformation
-    activeCard.style.transform = `translate(${deltaX}px, ${deltaY}px) rotate(${rotation}deg)`;
-    
-    // Visual feedback - add opacity based on distance
-    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-    const opacity = Math.max(0.5, 1 - (distance / 300));
-    activeCard.style.opacity = opacity;
-}
-
-function handleDragEnd(e) {
-    if (!isDraggingCard || !activeCard) return;
-    
-    const deltaX = currentPosX - startPosX;
-    const deltaY = currentPosY - startPosY;
-    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-    
-    activeCard.classList.remove('dragging');
-    
-    // If swiped far enough (threshold: 100px)
-    if (distance > 100) {
-        removeCard(deltaX > 0 ? 'right' : 'left');
-    } else {
-        // Snap back to original position
-        activeCard.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-        activeCard.style.transform = '';
-        activeCard.style.opacity = '1';
+    // Optional: Keep swipe functionality for mobile
+    cardsArray.forEach((card) => {
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchEndX = 0;
+        let touchEndY = 0;
         
-        // Remove transition after animation
-        setTimeout(() => {
-            if (activeCard) {
-                activeCard.style.transition = '';
+        card.addEventListener('touchstart', (e) => {
+            if (!isTopCard(card)) return;
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+        
+        card.addEventListener('touchmove', (e) => {
+            if (!isTopCard(card)) return;
+            touchEndX = e.touches[0].clientX;
+            touchEndY = e.touches[0].clientY;
+        }, { passive: true });
+        
+        card.addEventListener('touchend', () => {
+            if (!isTopCard(card)) return;
+            
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = Math.abs(touchEndY - touchStartY);
+            
+            // Only swipe if horizontal movement is significant and vertical is minimal
+            if (Math.abs(deltaX) > 80 && deltaY < 50) {
+                if (deltaX > 0) {
+                    moveCardRight();
+                } else {
+                    moveCardLeft();
+                }
             }
-        }, 400);
-    }
-    
-    isDraggingCard = false;
-    activeCard = null;
-    startPosX = 0;
-    startPosY = 0;
-    currentPosX = 0;
-    currentPosY = 0;
-}
-
-function removeCard(direction) {
-    if (!activeCard) return;
-    
-    const card = activeCard;
-    card.classList.add('removing');
-    
-    // Apply swipe animation
-    if (direction === 'right') {
-        card.classList.add('swipe-right');
-    } else {
-        card.classList.add('swipe-left');
-    }
-    
-    // Remove from array
-    cardStack = cardStack.filter(c => c !== card);
-    
-    // After animation, hide the card
-    setTimeout(() => {
-        card.classList.add('removed');
-        card.style.display = 'none';
-        
-        // Update remaining cards
-        updateCardPositions();
-    }, 600);
-    
-    activeCard = null;
-}
-
-function updateCardPositions() {
-    // Reorganize remaining cards in the stack
-    cardStack.forEach((card, index) => {
-        card.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-        
-        // Reset any transformations
-        setTimeout(() => {
-            card.style.transform = '';
-            card.style.opacity = '';
-        }, 50);
+        });
     });
+}
+
+function isTopCard(card) {
+    return cardsArray.indexOf(card) === currentCardNumber;
+}
+
+function moveCardRight() {
+    if (currentCardNumber >= cardsArray.length) return;
+    
+    const currentCard = cardsArray[currentCardNumber];
+    if (!currentCard) return;
+    
+    currentCard.classList.add('removing', 'swipe-right');
+    
+    setTimeout(() => {
+        currentCard.classList.add('removed');
+        currentCardNumber++;
+        updateCardCounter();
+        reorganizeCards();
+    }, 600);
+}
+
+function moveCardLeft() {
+    if (currentCardNumber >= cardsArray.length) return;
+    
+    const currentCard = cardsArray[currentCardNumber];
+    if (!currentCard) return;
+    
+    currentCard.classList.add('removing', 'swipe-left');
+    
+    setTimeout(() => {
+        currentCard.classList.add('removed');
+        currentCardNumber++;
+        updateCardCounter();
+        reorganizeCards();
+    }, 600);
+}
+
+function reorganizeCards() {
+    // Update data-card attributes for remaining cards
+    cardsArray.forEach((card, index) => {
+        if (index >= currentCardNumber) {
+            const position = index - currentCardNumber + 1;
+            card.setAttribute('data-card', position);
+        }
+    });
+    
+    // Disable arrows if all cards are gone
+    updateArrowStates();
+}
+
+function updateCardCounter() {
+    const currentCardSpan = document.getElementById('currentCard');
+    const totalCardsSpan = document.getElementById('totalCards');
+    
+    if (currentCardSpan) {
+        currentCardSpan.textContent = Math.min(currentCardNumber + 1, totalCardsCount);
+    }
+    
+    if (totalCardsSpan) {
+        totalCardsSpan.textContent = totalCardsCount;
+    }
+}
+
+function updateArrowStates() {
+    const leftArrow = document.getElementById('cardArrowLeft');
+    const rightArrow = document.getElementById('cardArrowRight');
+    
+    // Disable both arrows when all cards are gone
+    if (currentCardNumber >= cardsArray.length) {
+        if (leftArrow) leftArrow.disabled = true;
+        if (rightArrow) rightArrow.disabled = true;
+    }
 }
 
 // Initialize cards when page 2 becomes active
 const page2Observer = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
         if (mutation.target.classList.contains('active')) {
-            // Small delay to ensure DOM is ready
-            setTimeout(initializeCards, 100);
+            setTimeout(initializeCardStack, 100);
         }
     });
 });
 
-// Start observing page 2
 const page2Element = document.getElementById('page2');
 if (page2Element) {
     page2Observer.observe(page2Element, {
@@ -443,12 +423,10 @@ if (page2Element) {
         attributeFilter: ['class']
     });
     
-    // Also initialize if page 2 is already active
     if (page2Element.classList.contains('active')) {
-        setTimeout(initializeCards, 100);
+        setTimeout(initializeCardStack, 100);
     }
 }
-
 // ================================
 // Scroll to Gallery
 // ================================
