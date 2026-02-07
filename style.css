@@ -220,6 +220,27 @@ body {
     75% { transform: translateX(10px); }
 }
 
+/* Love Message */
+.love-message {
+    font-size: 1.3rem;
+    line-height: 1.8;
+    color: var(--text-dark);
+    margin-bottom: 50px;
+    padding: 0 20px;
+    animation: fade-in 1s ease-out 0.6s both;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* ================================
    PAGE 2: Success Container
    ================================ */
